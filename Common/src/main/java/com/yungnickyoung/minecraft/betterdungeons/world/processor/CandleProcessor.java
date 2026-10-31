@@ -21,18 +21,18 @@ import java.util.List;
 
 
 
-public class CandleProcessor extends StructureProcessor {
+public class CandleProcessor implements StructureProcessor {
     public static final CandleProcessor INSTANCE = new CandleProcessor();
     public static final MapCodec<CandleProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private static final List<Block> CANDLES = List.of(Blocks.CANDLE, Blocks.WHITE_CANDLE, Blocks.GRAY_CANDLE,
-            Blocks.LIGHT_GRAY_CANDLE, Blocks.BROWN_CANDLE, Blocks.GREEN_CANDLE, Blocks.PURPLE_CANDLE, Blocks.BLACK_CANDLE);
+    private static final List<Block> CANDLES = List.of(Blocks.CANDLE, Blocks.DYED_CANDLE.white(), Blocks.DYED_CANDLE.gray(),
+            Blocks.DYED_CANDLE.lightGray(), Blocks.DYED_CANDLE.brown(), Blocks.DYED_CANDLE.green(), Blocks.DYED_CANDLE.purple(), Blocks.DYED_CANDLE.black());
 
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
         if (blockInfoGlobal.state().getBlock() instanceof SeaPickleBlock) {
@@ -52,7 +52,8 @@ public class CandleProcessor extends StructureProcessor {
         return CANDLES.get(i);
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.CANDLE_PROCESSOR;
     }
 }

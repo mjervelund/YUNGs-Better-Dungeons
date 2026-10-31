@@ -30,7 +30,7 @@ import java.util.Optional;
  */
 
 
-public class ZombieMainStairsProcessor extends StructureProcessor implements ISafeWorldModifier {
+public class ZombieMainStairsProcessor implements StructureProcessor, ISafeWorldModifier {
     public static final ZombieMainStairsProcessor INSTANCE = new ZombieMainStairsProcessor();
     public static final MapCodec<ZombieMainStairsProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -49,7 +49,7 @@ public class ZombieMainStairsProcessor extends StructureProcessor implements ISa
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
         if (blockInfoGlobal.state().getBlock() == Blocks.WARPED_STAIRS) { // Warped stairs are the marker for the main staircase
@@ -76,9 +76,9 @@ public class ZombieMainStairsProcessor extends StructureProcessor implements ISa
             // Begin spawning staircase
             RandomSource random = structurePlacementData.getRandom(blockInfoGlobal.pos());
 
-            BlockPos.MutableBlockPos leftPos = new BlockPos(blockInfoGlobal.pos().relative(facing.getCounterClockWise())).mutable();
-            BlockPos.MutableBlockPos middlePos = new BlockPos(blockInfoGlobal.pos()).mutable();
-            BlockPos.MutableBlockPos rightPos = new BlockPos(blockInfoGlobal.pos().relative(facing.getClockWise())).mutable();
+            BlockPos.MutableBlockPos leftPos = (blockInfoGlobal.pos().relative(facing.getCounterClockWise())).immutable().mutable();
+            BlockPos.MutableBlockPos middlePos = (blockInfoGlobal.pos()).immutable().mutable();
+            BlockPos.MutableBlockPos rightPos = (blockInfoGlobal.pos().relative(facing.getClockWise())).immutable().mutable();
             BlockState tempBlock;
             Optional<BlockState> tempOptional;
 
@@ -297,7 +297,8 @@ public class ZombieMainStairsProcessor extends StructureProcessor implements ISa
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.ZOMBIE_MAIN_STAIRS_PROCESSOR;
     }
 

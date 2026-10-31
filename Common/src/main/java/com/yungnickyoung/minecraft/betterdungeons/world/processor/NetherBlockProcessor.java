@@ -17,7 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 
 
-public class NetherBlockProcessor extends StructureProcessor {
+public class NetherBlockProcessor implements StructureProcessor {
     public static final NetherBlockProcessor INSTANCE = new NetherBlockProcessor();
     public static final MapCodec<NetherBlockProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -25,7 +25,7 @@ public class NetherBlockProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
         if (!BetterDungeonsCommon.CONFIG.general.enableNetherBlocks) {
@@ -40,7 +40,8 @@ public class NetherBlockProcessor extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.NETHER_BLOCK_PROCESSOR;
     }
 }

@@ -17,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  */
 
 
-public class ZombieRotProcessor extends StructureProcessor {
+public class ZombieRotProcessor implements StructureProcessor {
     public static final ZombieRotProcessor INSTANCE = new ZombieRotProcessor();
     public static final MapCodec<ZombieRotProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -25,10 +25,10 @@ public class ZombieRotProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
-        if (blockInfoGlobal.state().getBlock() == Blocks.COBBLESTONE || blockInfoGlobal.state().getBlock() == Blocks.CYAN_TERRACOTTA || blockInfoGlobal.state().getBlock() == Blocks.COBBLESTONE_STAIRS) {
+        if (blockInfoGlobal.state().getBlock() == Blocks.COBBLESTONE || blockInfoGlobal.state().getBlock() == Blocks.DYED_TERRACOTTA.cyan() || blockInfoGlobal.state().getBlock() == Blocks.COBBLESTONE_STAIRS) {
             if (levelReader.getBlockState(blockInfoGlobal.pos()).isAir()) {
                 blockInfoGlobal = new StructureTemplate.StructureBlockInfo(blockInfoGlobal.pos(), Blocks.CAVE_AIR.defaultBlockState(), null);
             }
@@ -36,7 +36,8 @@ public class ZombieRotProcessor extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.ZOMBIE_ROT_PROCESSOR;
     }
 }

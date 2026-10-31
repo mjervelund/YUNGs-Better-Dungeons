@@ -21,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 
 
-public class ZombieDungeonStairProcessor extends StructureProcessor {
+public class ZombieDungeonStairProcessor implements StructureProcessor {
     public static final ZombieDungeonStairProcessor INSTANCE = new ZombieDungeonStairProcessor();
     public static final MapCodec<ZombieDungeonStairProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -37,7 +37,7 @@ public class ZombieDungeonStairProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
         if (blockInfoGlobal.state().getBlock() == Blocks.COBBLESTONE_STAIRS) {
@@ -58,7 +58,8 @@ public class ZombieDungeonStairProcessor extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.ZOMBIE_DUNGEON_STAIR_PROCESSOR;
     }
 }

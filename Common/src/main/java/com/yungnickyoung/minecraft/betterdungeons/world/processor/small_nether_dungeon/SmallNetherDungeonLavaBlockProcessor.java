@@ -17,7 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 
 
-public class SmallNetherDungeonLavaBlockProcessor extends StructureProcessor {
+public class SmallNetherDungeonLavaBlockProcessor implements StructureProcessor {
     public static final SmallNetherDungeonLavaBlockProcessor INSTANCE = new SmallNetherDungeonLavaBlockProcessor();
     public static final MapCodec<SmallNetherDungeonLavaBlockProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -25,20 +25,21 @@ public class SmallNetherDungeonLavaBlockProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
-        if (blockInfoGlobal.state().is(Blocks.ORANGE_WOOL)) {
+        if (blockInfoGlobal.state().is(Blocks.WOOL.orange())) {
             blockInfoGlobal = new StructureTemplate.StructureBlockInfo(blockInfoGlobal.pos(), Blocks.LAVA.defaultBlockState(), null);
             if (levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(ChunkPos.containing(blockInfoGlobal.pos()))) {
                 return blockInfoGlobal;
             }
-            levelReader.getChunk(blockInfoGlobal.pos()).markPosForPostprocessing(blockInfoGlobal.pos()); // Schedule fluid tick
+            levelReader.getChunk(blockInfoGlobal.pos()).markPosForPostProcessing(blockInfoGlobal.pos()); // Schedule fluid tick
         }
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.SMALL_NETHER_DUNGEON_LAVA_BLOCK_PROCESSOR;
     }
 }

@@ -25,7 +25,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 
 
-public class SkeletonDungeonLegProcessor extends StructureProcessor {
+public class SkeletonDungeonLegProcessor implements StructureProcessor {
     public static final SkeletonDungeonLegProcessor INSTANCE = new SkeletonDungeonLegProcessor();
     public static final MapCodec<SkeletonDungeonLegProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -36,10 +36,10 @@ public class SkeletonDungeonLegProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
-        if (blockInfoGlobal.state().getBlock() == Blocks.BLUE_STAINED_GLASS) {
+        if (blockInfoGlobal.state().getBlock() == Blocks.STAINED_GLASS.blue()) {
             if (levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(ChunkPos.containing(blockInfoGlobal.pos()))) {
                 return blockInfoGlobal;
             }
@@ -62,7 +62,8 @@ public class SkeletonDungeonLegProcessor extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.SKELETON_DUNGEON_LEG_PROCESSOR;
     }
 }

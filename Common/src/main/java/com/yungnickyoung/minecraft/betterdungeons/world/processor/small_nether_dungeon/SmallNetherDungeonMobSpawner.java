@@ -32,7 +32,7 @@ import java.util.Optional;
 
 
 
-public class SmallNetherDungeonMobSpawner extends StructureProcessor {
+public class SmallNetherDungeonMobSpawner implements StructureProcessor {
     public static final MapCodec<SmallNetherDungeonMobSpawner> CODEC = RecordCodecBuilder.mapCodec(codecBuilder -> codecBuilder
             .group(
                     Identifier.CODEC
@@ -54,7 +54,7 @@ public class SmallNetherDungeonMobSpawner extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
         if (blockInfoGlobal.state().getBlock() instanceof SpawnerBlock) {
@@ -152,7 +152,8 @@ public class SmallNetherDungeonMobSpawner extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.SMALL_NETHER_DUNGEON_MOB_SPAWNER_PROCESSOR;
     }
 }

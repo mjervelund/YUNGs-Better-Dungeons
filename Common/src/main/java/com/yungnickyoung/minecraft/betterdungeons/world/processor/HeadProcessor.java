@@ -16,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 
 
-public class HeadProcessor extends StructureProcessor {
+public class HeadProcessor implements StructureProcessor {
     public static final HeadProcessor INSTANCE = new HeadProcessor();
     public static final MapCodec<HeadProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -24,7 +24,7 @@ public class HeadProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
         if (blockInfoGlobal.state().getBlock() instanceof AbstractSkullBlock) {
@@ -35,7 +35,8 @@ public class HeadProcessor extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.HEAD_PROCESSOR;
     }
 }

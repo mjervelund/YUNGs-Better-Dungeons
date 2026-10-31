@@ -17,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  */
 
 
-public class SmallDungeonCobblestoneProcessor extends StructureProcessor {
+public class SmallDungeonCobblestoneProcessor implements StructureProcessor {
     public static final SmallDungeonCobblestoneProcessor INSTANCE = new SmallDungeonCobblestoneProcessor();
     public static final MapCodec<SmallDungeonCobblestoneProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
@@ -25,7 +25,7 @@ public class SmallDungeonCobblestoneProcessor extends StructureProcessor {
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader,
                                                              BlockPos jigsawPiecePos,
                                                              BlockPos jigsawPieceBottomCenterPos,
-                                                             StructureTemplate.StructureBlockInfo blockInfoLocal,
+                                                             BlockPos blockPosLocal,
                                                              StructureTemplate.StructureBlockInfo blockInfoGlobal,
                                                              StructurePlaceSettings structurePlacementData) {
         if (blockInfoGlobal.state().getBlock() == Blocks.COBBLESTONE) {
@@ -36,7 +36,8 @@ public class SmallDungeonCobblestoneProcessor extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    @Override
+    public MapCodec<? extends StructureProcessor> codec() {
         return StructureProcessorTypeModule.SMALL_DUNGEON_COBBLE_PROCESSOR;
     }
 }
